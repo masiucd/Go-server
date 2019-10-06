@@ -1,6 +1,12 @@
+/* eslint-disable no-console */
 
 import axios from 'axios';
-// https://jsonplaceholder.typicode.com/todos
+
+
+const api = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  timeout: 5000
+})
 
 const state = {
   todos: [
@@ -24,9 +30,30 @@ const getters = {
 };
 
 
-const actions = {};
+const actions = {
+  async getTodos({commit}){
+    const res = await api.get('/todos');
 
-const mutations = {};
+    // sending the action to aut mutation
+    commit('setTodos', res.data)
+  },
+  async addTodo({commit},title){
+    const res = await api.post(`/todos`, {title, completed:false })
+
+    commit('newTodo', res.data);
+  },
+
+  async deleteTodo({commit},id) {
+    await api.delete(`/todos/${id}`)
+    commit('deleteTodo',id);
+  }
+};
+
+const mutations = {
+  setTodos: (state,todos) => (state.todos = todos),
+  newTodo: (state,todo) => state.todos.unshift(todo),
+  deleteTodo: (state,id) => state.todos = state.todos.filter(todo => todo.id !== id),
+};
 
 
 export default {
