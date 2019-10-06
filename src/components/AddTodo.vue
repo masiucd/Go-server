@@ -32,7 +32,7 @@ export default {
 
 <style scoped>
 .addTodo {
-  padding: 2rem 1rem;
+  padding: 0.7rem 1rem;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
