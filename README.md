@@ -1,29 +1,11 @@
-# vuex-app
+# Go server
 
-## Project setup
-```
-yarn install
-```
+## Table of Contents
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+- [About](#about)
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+## About <a name = "about"></a>
 
-### Run your tests
-```
-yarn run test
-```
+## Usage <a name = "usage"></a>
 
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Add notes about how to use the system.
