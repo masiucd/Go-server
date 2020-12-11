@@ -31,10 +31,25 @@ func CreateDish(c *gin.Context)  {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest,gin.H{"error": err.Error()})
+		return
 	}
 
 	dish := models.Dish{Name: input.Name, Stars: input.Stars, Author: input.Author }
-	models.DB.Create(dish)
+	models.DB.Create(&dish)
 
 	c.JSON(http.StatusOK, gin.H{"data":dish})
+}
+
+
+// GetDishByID route
+// GET /dish/:id
+func GetDishByID(c *gin.Context){
+	var dish models.Dish
+
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&dish).Error;err!=nil{
+		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
+		return 
+	}
+
+	c.JSON(http.StatusOK,gin.H{"data":dish})
 }
