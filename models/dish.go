@@ -7,3 +7,4 @@ type Dish struct {
 	Stars int `json:"stars"`
 	Author string `json:"author"`
 }
+
