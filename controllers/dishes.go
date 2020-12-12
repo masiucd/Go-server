@@ -80,3 +80,17 @@ func UpdateDish(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": dish})
 
 }
+
+// RemoveDish route
+// DELETE /dish/:id
+func RemoveDish(c *gin.Context) {
+	var dish models.Dish
+
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&dish).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	models.DB.Delete(&dish)
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}

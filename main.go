@@ -20,10 +20,13 @@ func main() {
 		AllowHeaders: []string{"Origin"},
 	}))
 
+	r.GET("/users", controllers.GetUsers)
+
 	r.GET("/dishes", controllers.GetDishes)
 	r.POST("/dish", controllers.CreateDish)
 	r.GET("/dish/:id", controllers.GetDishByID)
 	r.PUT("/dish/:id", controllers.UpdateDish)
+	r.DELETE("/dish/:id", controllers.RemoveDish)
 
 	r.Run()
 }
