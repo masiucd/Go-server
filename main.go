@@ -23,6 +23,7 @@ func main() {
 	r.GET("/dishes", controllers.GetDishes)
 	r.POST("/dish", controllers.CreateDish)
 	r.GET("/dish/:id", controllers.GetDishByID)
+	r.PUT("/dish/:id", controllers.UpdateDish)
 
 	r.Run()
 }
