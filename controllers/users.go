@@ -14,6 +14,13 @@ type UserInput struct {
 	Age   int    `json:"age" binding:"required"`
 }
 
+// UpdateUserInput input for updating user
+type UpdateUserInput struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Age   string `json:"age"`
+}
+
 // GetUsers route
 // GET /users
 func GetUsers(c *gin.Context) {
@@ -42,4 +49,35 @@ func RegisterUser(c *gin.Context) {
 	models.DB.Create(&newUser)
 
 	c.JSON(http.StatusOK, gin.H{"data": newUser})
+}
+
+// UpdateUser route
+// PUT user/:id
+func UpdateUser(c *gin.Context) {
+
+	var user models.User
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var input UpdateUserInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	models.DB.Model(&user).Update(input)
+
+	c.JSON(http.StatusOK, gin.H{"data": user})
+
+}
+
+// GetUserByID route
+// GET user/:id
+func GetUserByID(c *gin.Context) {
+	var user models.User
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": user})
 }

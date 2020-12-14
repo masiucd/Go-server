@@ -21,7 +21,9 @@ func main() {
 	}))
 
 	r.GET("/users", controllers.GetUsers)
+	r.GET("/user/:id", controllers.GetUserByID)
 	r.POST("/user", controllers.RegisterUser)
+	r.PUT("/user/:id", controllers.UpdateUser)
 
 	r.GET("/dishes", controllers.GetDishes)
 	r.POST("/dish", controllers.CreateDish)
