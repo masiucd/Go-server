@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/masiuciszek/go-server/models"
+	"github.com/masiuciszek/go-server/utils"
 )
 
 // UserInput fields required to create ne user
@@ -39,16 +40,22 @@ func GetUsers(c *gin.Context) {
 // POST /user
 func RegisterUser(c *gin.Context) {
 	var userInput UserInput
-
+	var user models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := utils.CreateToken(user.ID)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
 	newUser := models.User{Name: userInput.Name, Email: userInput.Email, Age: userInput.Age}
 	models.DB.Create(&newUser)
 
-	c.JSON(http.StatusOK, gin.H{"data": newUser})
+	c.JSON(http.StatusOK, gin.H{"data": newUser, "token": token})
 }
 
 // UpdateUser route
