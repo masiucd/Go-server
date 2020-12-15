@@ -10,16 +10,18 @@ import (
 
 // UserInput fields required to create ne user
 type UserInput struct {
-	Name  string `json:"name" binding:"required"`
-	Email string `json:"email" binding:"required"`
-	Age   int    `json:"age" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Age      int    `json:"age" binding:"required"`
 }
 
 // UpdateUserInput input for updating user
 type UpdateUserInput struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Age   string `json:"age"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Age      string `json:"age"`
 }
 
 // GetUsers route
@@ -41,6 +43,7 @@ func GetUsers(c *gin.Context) {
 func RegisterUser(c *gin.Context) {
 	var userInput UserInput
 	var user models.User
+
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -54,6 +57,9 @@ func RegisterUser(c *gin.Context) {
 
 	newUser := models.User{Name: userInput.Name, Email: userInput.Email, Age: userInput.Age}
 	models.DB.Create(&newUser)
+
+	// name, value string, maxAge int, path, domain string, secure, httpOnly bool
+	c.SetCookie("auth_cookie", token, 36000, "/", "localhost", false, false) // this should be in a ENV file
 
 	c.JSON(http.StatusOK, gin.H{"data": newUser, "token": token})
 }
