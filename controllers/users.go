@@ -55,7 +55,13 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	newUser := models.User{Name: userInput.Name, Email: userInput.Email, Age: userInput.Age}
+	hashedPassword, err := utils.HashPassword(userInput.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	newUser := models.User{Name: userInput.Name, Email: userInput.Email, Password: hashedPassword, Age: userInput.Age}
 	models.DB.Create(&newUser)
 
 	// name, value string, maxAge int, path, domain string, secure, httpOnly bool
